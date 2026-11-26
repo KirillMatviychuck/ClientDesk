@@ -18,10 +18,14 @@ insert into auth.users (id, email, aud, role, raw_user_meta_data) values
   ('bbbbbbbb-0000-0000-0000-000000000002', 'b@test.local', 'authenticated', 'authenticated', '{}'),
   ('cccccccc-0000-0000-0000-000000000003', 'm@test.local', 'authenticated', 'authenticated', '{}');
 
+-- Only the three test users: the local database may hold other accounts.
 create temp table ws as
   select m.user_id as owner_id, m.workspace_id as id
   from public.workspace_members m
-  where m.role = 'owner';
+  where m.role = 'owner'
+    and m.user_id in ('aaaaaaaa-0000-0000-0000-000000000001',
+                      'bbbbbbbb-0000-0000-0000-000000000002',
+                      'cccccccc-0000-0000-0000-000000000003');
 grant select on ws to authenticated;
 
 insert into public.workspace_members (workspace_id, user_id, role)

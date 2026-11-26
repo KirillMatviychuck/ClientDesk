@@ -285,6 +285,33 @@ export type Database = {
           },
         ]
       }
+      invoice_counters: {
+        Row: {
+          last_seq: number
+          workspace_id: string
+          year: number
+        }
+        ComputedFields: never
+        Insert: {
+          last_seq: number
+          workspace_id: string
+          year: number
+        }
+        Update: {
+          last_seq?: number
+          workspace_id?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'invoice_counters_workspace_id_fkey'
+            columns: ['workspace_id']
+            isOneToOne: false
+            referencedRelation: 'workspaces'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       invoice_items: {
         Row: {
           created_at: string
@@ -304,7 +331,7 @@ export type Database = {
           description: string
           id?: string
           invoice_id: string
-          line_total_cents: number
+          line_total_cents?: number
           position?: number
           quantity: number
           unit_price_cents: number
@@ -368,15 +395,15 @@ export type Database = {
         Insert: {
           client_id: string
           created_at?: string
-          currency: Database['public']['Enums']['currency_code']
+          currency?: Database['public']['Enums']['currency_code']
           deal_id?: string | null
           due_date: string
           id?: string
           issue_date?: string
           note?: string | null
           number?: never
-          number_seq: number
-          number_year: number
+          number_seq?: number
+          number_year?: number
           paid_cents?: number
           sent_at?: string | null
           status?: Database['public']['Enums']['invoice_status']
@@ -664,8 +691,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_demo_accounts: { Args: Record<PropertyKey, never>; Returns: number }
+      clear_workspace_data: { Args: { ws: string }; Returns: undefined }
+      demo_workspace_id: { Args: Record<PropertyKey, never>; Returns: string }
+      generate_demo_data: { Args: { ws: string }; Returns: undefined }
       has_workspace_role: { Args: { roles: string[]; ws: string }; Returns: boolean }
+      is_workspace_folder_member: { Args: { object_name: string }; Returns: boolean }
       is_workspace_member: { Args: { ws: string }; Returns: boolean }
+      jsonb_changes: { Args: { keys: string[]; new_row: Json; old_row: Json }; Returns: Json }
+      log_activity: {
+        Args: {
+          event_type: Database['public']['Enums']['activity_type']
+          p_changes?: Json
+          p_client_id: string
+          p_deal_id?: string
+          p_invoice_id?: string
+          p_task_id?: string
+          ws: string
+        }
+        Returns: undefined
+      }
+      reset_demo_data: { Args: Record<PropertyKey, never>; Returns: undefined }
+      seed_demo_data: { Args: Record<PropertyKey, never>; Returns: undefined }
     }
     Enums: {
       activity_source: 'system' | 'manual'
