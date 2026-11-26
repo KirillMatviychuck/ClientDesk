@@ -3,9 +3,10 @@
 -- deals.closed_at: set when the deal enters won/lost, cleared when it leaves.
 -- tasks.completed_at: set when the task becomes done, cleared when reopened.
 --
--- On INSERT a value given by the caller is kept (the demo seed back-dates
--- history); otherwise now() is used. On UPDATE the value can only change
--- together with the stage/status, so the client cannot rewrite it.
+-- A value given by the caller together with the transition (INSERT, or an
+-- UPDATE that changes the stage/status) is kept, so history can be
+-- back-dated (the demo seed does this); otherwise now() is used. While the
+-- stage/status stays the same the value is frozen.
 
 create function public.deals_set_lifecycle()
 returns trigger
@@ -20,7 +21,9 @@ begin
   elsif tg_op = 'INSERT' then
     new.closed_at := coalesce(new.closed_at, now());
   elsif old.stage is distinct from new.stage then
-    new.closed_at := now();
+    if new.closed_at is not distinct from old.closed_at then
+      new.closed_at := now();
+    end if;
   else
     new.closed_at := old.closed_at;
   end if;
@@ -46,7 +49,9 @@ begin
   elsif tg_op = 'INSERT' then
     new.completed_at := coalesce(new.completed_at, now());
   elsif old.status is distinct from new.status then
-    new.completed_at := now();
+    if new.completed_at is not distinct from old.completed_at then
+      new.completed_at := now();
+    end if;
   else
     new.completed_at := old.completed_at;
   end if;
