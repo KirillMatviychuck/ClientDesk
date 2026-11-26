@@ -4,7 +4,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(28);
+select plan(30);
 
 insert into auth.users (id, email, aud, role) values
   ('eeeeeeee-0000-0000-0000-000000000001', 'inv@test.local', 'authenticated', 'authenticated');
@@ -188,6 +188,22 @@ select throws_ok($$
   update public.invoices set number_seq = 7, workspace_id = gen_random_uuid()
   where id = '32222222-0000-0000-0000-000000000002'
 $$, '23514', null, 'an invoice cannot move to another workspace');
+
+-- Renumbering: a draft moved to another year gets that year's next number.
+insert into public.invoices (id, workspace_id, client_id, issue_date, due_date)
+select '32222222-0000-0000-0000-000000000005', ws, '31111111-0000-0000-0000-000000000001',
+       '2027-02-01', '2027-02-15'
+from ctx;
+
+update public.invoices set issue_date = '2027-02-10'
+where id = '32222222-0000-0000-0000-000000000005';
+select is((select number from public.invoices where id = '32222222-0000-0000-0000-000000000005'),
+  'INV-2027-0002', 'a draft keeps its number when the issue date stays in the same year');
+
+update public.invoices set issue_date = '2026-12-30', due_date = '2027-01-13'
+where id = '32222222-0000-0000-0000-000000000005';
+select is((select number from public.invoices where id = '32222222-0000-0000-0000-000000000005'),
+  'INV-2026-0004', 'a draft moved to another year gets the next number of that year');
 
 -- Workspace delete cascades through invoices, items and payments.
 select results_eq($$
