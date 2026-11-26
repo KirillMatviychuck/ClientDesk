@@ -25,7 +25,22 @@ export const router = createBrowserRouter([
                 path: ROUTES.register,
                 lazy: { Component: async () => (await import('@/pages/register')).RegisterPage },
               },
+              {
+                path: ROUTES.forgotPassword,
+                lazy: {
+                  Component: async () =>
+                    (await import('@/pages/forgot-password')).ForgotPasswordPage,
+                },
+              },
             ],
+          },
+          {
+            // Outside GuestRoute: the email link signs the user in with a
+            // recovery session, and they must stay here to set the password.
+            path: ROUTES.resetPassword,
+            lazy: {
+              Component: async () => (await import('@/pages/reset-password')).ResetPasswordPage,
+            },
           },
         ],
       },
