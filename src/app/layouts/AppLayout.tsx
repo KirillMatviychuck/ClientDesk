@@ -32,9 +32,10 @@ export function AppLayout() {
   return (
     <div className="min-h-svh">
       <header className="border-b">
-        <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
-          <span className="font-semibold">ClientDesk</span>
-          <nav className="flex flex-1 gap-1 overflow-x-auto">
+        {/* Below md the nav gets its own scrollable row under the brand and actions. */}
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-1 px-4 py-2 md:h-14 md:flex-nowrap md:py-0">
+          <span className="mr-auto font-semibold md:mr-0">ClientDesk</span>
+          <nav className="order-last -mx-4 flex w-[calc(100%+2rem)] gap-1 overflow-x-auto px-4 md:order-none md:mx-0 md:w-auto md:flex-1 md:px-0">
             {NAV_ITEMS.map(({ to, label }) => (
               <NavLink
                 key={to}
