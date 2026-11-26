@@ -18,6 +18,7 @@ const BY_CODE: Record<string, string> = {
   over_request_rate_limit: 'Too many attempts. Wait a minute and try again.',
   over_email_send_rate_limit: 'Too many emails sent. Wait a few minutes and try again.',
   signup_disabled: 'Sign-ups are currently closed.',
+  anonymous_provider_disabled: 'The demo is unavailable right now. Please try again later.',
   session_not_found: 'Your session has expired. Request a new link or log in again.',
   session_expired: 'Your session has expired. Request a new link or log in again.',
   reauthentication_needed: 'For security, log in again before changing the password.',

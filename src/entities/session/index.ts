@@ -1,6 +1,7 @@
 export {
   canDelete,
   canEdit,
+  isDemoSession,
   onSessionEvent,
   useCurrentWorkspace,
   useSession,
@@ -9,3 +10,4 @@ export {
   type WorkspaceRole,
 } from './model'
 export { sessionKeys } from './api'
+export { getAuthErrorMessage } from './lib'

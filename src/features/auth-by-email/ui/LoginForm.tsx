@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 
 import { FormError, FormField } from '@/shared/ui/form-field'
 
-import { getAuthErrorMessage } from '../lib'
+import { getAuthErrorMessage } from '@/entities/session'
 import { loginSchema, useSignIn, type LoginValues } from '../model'
 import { SubmitButton } from './SubmitButton'
 

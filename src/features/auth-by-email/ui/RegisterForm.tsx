@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 
 import { FormError, FormField } from '@/shared/ui/form-field'
 
-import { getAuthErrorMessage } from '../lib'
+import { getAuthErrorMessage } from '@/entities/session'
 import { registerSchema, useSignUp, type RegisterValues } from '../model'
 import { SubmitButton } from './SubmitButton'
 import { SuccessNotice } from './SuccessNotice'
