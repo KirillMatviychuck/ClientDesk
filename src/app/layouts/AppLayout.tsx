@@ -6,6 +6,7 @@ import { ThemeSwitcher } from '@/features/switch-theme'
 import { cn } from '@/shared/lib/utils'
 import { ROUTES } from '@/shared/routes'
 import { Skeleton } from '@/shared/ui/skeleton'
+import { DemoBanner } from '@/widgets/demo-banner'
 
 const NAV_ITEMS = [
   { to: ROUTES.dashboard, label: 'Dashboard' },
@@ -56,6 +57,7 @@ export function AppLayout() {
           <SignOutButton />
         </div>
       </header>
+      <DemoBanner />
       <main className="mx-auto max-w-6xl px-4 py-6">
         <Outlet />
       </main>
