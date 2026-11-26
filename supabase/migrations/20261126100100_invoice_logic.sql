@@ -234,19 +234,14 @@ end;
 $$;
 
 -- After any item or payment change: recompute the parent invoice.
--- A delete that comes from a cascade (pg_trigger_depth() > 1: the invoice or
--- the workspace is being deleted) is skipped. Updating a parent that the same
--- command is about to delete would fail with "tuple already modified".
+-- A delete cascaded from the invoice or the workspace finds no parent row
+-- (cascades run after the parent is gone), so it updates nothing.
 create function public.touch_parent_invoice()
 returns trigger
 language plpgsql
 set search_path = ''
 as $$
 begin
-  if tg_op = 'DELETE' and pg_trigger_depth() > 1 then
-    return null;
-  end if;
-
   update public.invoices
     set updated_at = now()
     where id = case when tg_op = 'DELETE' then old.invoice_id else new.invoice_id end;
