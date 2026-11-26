@@ -1,4 +1,8 @@
-import type { AuthChangeEvent, Session } from '@supabase/supabase-js'
+import {
+  isAuthSessionMissingError,
+  type AuthChangeEvent,
+  type Session,
+} from '@supabase/supabase-js'
 
 import { supabase } from '@/shared/api'
 
@@ -24,6 +28,27 @@ export async function fetchCurrentWorkspace(userId: string) {
     .limit(1)
     .single()
 
-  if (error) throw error
+  if (error) {
+    // No membership row: the user may have been deleted (e.g. an expired demo
+    // account removed by cron) while their JWT is still valid.
+    if (error.code === NO_ROWS) await signOutIfUserIsGone()
+    throw error
+  }
   return { ...data.workspace, role: data.role }
+}
+
+/** PostgREST: `.single()` matched no rows. */
+const NO_ROWS = 'PGRST116'
+const GONE_USER_CODES = new Set(['user_not_found', 'session_not_found'])
+
+/**
+ * Asks the auth server whether the user still exists and ends the local
+ * session if not. Fires SIGNED_OUT, so the route guard sends them to /login.
+ */
+async function signOutIfUserIsGone(): Promise<void> {
+  const { error } = await supabase.auth.getUser()
+  if (!error) return
+  if (isAuthSessionMissingError(error) || (error.code && GONE_USER_CODES.has(error.code))) {
+    await supabase.auth.signOut({ scope: 'local' })
+  }
 }
