@@ -1,8 +1,11 @@
 import { NavLink, Outlet } from 'react-router'
 
+import { useCurrentWorkspace } from '@/entities/session'
+import { SignOutButton } from '@/features/sign-out'
 import { ThemeSwitcher } from '@/features/switch-theme'
 import { cn } from '@/shared/lib/utils'
 import { ROUTES } from '@/shared/routes'
+import { Skeleton } from '@/shared/ui/skeleton'
 
 const NAV_ITEMS = [
   { to: ROUTES.dashboard, label: 'Dashboard' },
@@ -12,6 +15,17 @@ const NAV_ITEMS = [
   { to: ROUTES.invoices, label: 'Invoices' },
   { to: ROUTES.settings, label: 'Settings' },
 ] as const
+
+function WorkspaceName() {
+  const { data, isPending } = useCurrentWorkspace()
+  if (isPending) return <Skeleton className="hidden h-4 w-28 sm:block" />
+  if (!data) return null
+  return (
+    <span className="hidden max-w-40 truncate text-sm text-muted-foreground sm:block">
+      {data.name}
+    </span>
+  )
+}
 
 export function AppLayout() {
   return (
@@ -37,7 +51,9 @@ export function AppLayout() {
               </NavLink>
             ))}
           </nav>
+          <WorkspaceName />
           <ThemeSwitcher />
+          <SignOutButton />
         </div>
       </header>
       <main className="mx-auto max-w-6xl px-4 py-6">
