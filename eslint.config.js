@@ -59,6 +59,11 @@ export default defineConfig([
     },
   },
   {
+    // Plain JS config files (eslint, steiger) are not part of the TS project.
+    files: ['*.config.js'],
+    extends: [js.configs.recommended],
+  },
+  {
     files: ['*.config.{js,ts}'],
     languageOptions: { globals: globals.node },
   },
