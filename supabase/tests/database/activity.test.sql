@@ -3,7 +3,7 @@ begin;
 
 create extension if not exists pgtap with schema extensions;
 
-select plan(14);
+select plan(15);
 
 insert into auth.users (id, email, aud, role) values
   ('ffffffff-0000-0000-0000-000000000001', 'act@test.local', 'authenticated', 'authenticated');
@@ -111,6 +111,16 @@ select results_eq($$
   with d as (delete from public.activity_events where source = 'system' returning 1)
   select count(*)::int from d
 $$, $$ values (0) $$, 'system events cannot be deleted');
+
+insert into public.clients (id, workspace_id, name)
+select '41111111-0000-0000-0000-000000000002', ws, 'Short-lived' from ctx;
+insert into public.activity_events (workspace_id, type, client_id, body)
+select ws, 'note', '41111111-0000-0000-0000-000000000002', 'Met at a conference' from ctx;
+select results_eq($$
+  with d as (delete from public.clients where id = '41111111-0000-0000-0000-000000000002'
+             returning 1)
+  select count(*)::int from d
+$$, $$ values (1) $$, 'a client with manual notes can be deleted (its feed goes with it)');
 
 select results_eq($$
   with d as (delete from public.workspaces returning 1)
