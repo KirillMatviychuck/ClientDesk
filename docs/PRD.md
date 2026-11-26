@@ -10,7 +10,7 @@
 - No real payments, no external integrations, and no emails sent to clients.
 
 ### User
-One role: the **account owner** (the freelancer). Each account sees only its own data. There are no teams, invitations or roles.
+The **account owner** (the freelancer). Each user gets a personal **workspace** on sign-up and is its `owner`. All business data belongs to a workspace and is visible only to its members. The schema also supports `admin` and `member` roles (members read and edit; only owner and admin delete; only the owner deletes the workspace), but there is no UI for teams or invitations.
 
 ### Localization and money
 - The interface is **English only**.
@@ -21,7 +21,7 @@ One role: the **account owner** (the freelancer). Each account sees only its own
 - SPA, desktop-first, correct layout from 375px wide.
 - Lists support pagination, sorting and search. Loading, empty and error states are handled explicitly.
 - Deleting uses a confirmation dialog. Deleting clients and deals is a soft delete (archive). Everything else is a hard delete.
-- Data isolation is enforced by **Row Level Security** in Postgres (`user_id = auth.uid()`), not only by filters in the UI.
+- Data isolation is enforced by **Row Level Security** in Postgres (workspace membership of `auth.uid()`), not only by filters in the UI.
 - All forms are validated with Zod schemas. Errors are shown next to the relevant fields.
 
 ---
@@ -335,7 +335,7 @@ Acceptance criteria:
 ## 10. Out of scope
 
 Not part of this project:
-- Teams, invitations, roles and access permissions. Each account has one user.
+- Teams, invitations and role management UI. Each workspace has one user (its owner); roles exist only in the database schema.
 - Sending emails from the app (invoices, reminders, digests). The exception is Supabase Auth system emails.
 - Online invoice payments, bank integrations (Monobank, PrivatBank), the Upwork API, Payoneer, Wise.
 - Multi-currency within an account, and exchange rates.

@@ -25,3 +25,8 @@ dist-ssr
 
 # Local progress log (handoff notes, not for the repo)
 docs/PROGRESS.md
+
+# Environment (only .env.example is committed)
+.env
+.env.*
+!.env.example
