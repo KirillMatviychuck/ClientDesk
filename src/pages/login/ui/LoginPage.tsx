@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router'
 
 import { LoginForm } from '@/features/auth-by-email'
+import { StartDemoButton } from '@/features/start-demo'
 import { ROUTES } from '@/shared/routes'
 
 export function LoginPage() {
@@ -23,6 +24,12 @@ export function LoginPage() {
           </Link>
         }
       />
+      <div className="flex items-center gap-3 text-xs text-muted-foreground uppercase">
+        <span className="h-px flex-1 bg-border" />
+        or
+        <span className="h-px flex-1 bg-border" />
+      </div>
+      <StartDemoButton />
       <p className="text-center text-sm text-muted-foreground">
         No account yet?{' '}
         <Link

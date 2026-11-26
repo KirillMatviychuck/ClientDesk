@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router'
 
 import { useSession } from '@/entities/session'
+import { useIsStartingDemo } from '@/features/start-demo'
 import { ROUTES } from '@/shared/routes'
 
 import { FullScreenLoader } from './FullScreenLoader'
@@ -28,11 +29,13 @@ export function ProtectedRoute() {
 /** Login/register pages: signed-in users are sent on to the app. */
 export function GuestRoute() {
   const session = useSession()
+  const isStartingDemo = useIsStartingDemo()
   const location = useLocation()
 
   if (session.status === 'loading') return <FullScreenLoader />
 
-  if (session.status === 'authenticated') {
+  // A demo visitor is signed in before the demo data exists: wait for it.
+  if (session.status === 'authenticated' && !isStartingDemo) {
     return <Navigate to={getRedirectTarget(location.state)} replace />
   }
 
