@@ -10,6 +10,7 @@ import { Skeleton } from '@/shared/ui/skeleton'
 /**
  * Target of the reset link in the email. Supabase reads the token from the URL
  * and opens a recovery session; without one the link is invalid or expired.
+ * A regular session is not enough: changing the password needs the link.
  */
 export function ResetPasswordPage() {
   const session = useSession()
@@ -36,6 +37,22 @@ export function ResetPasswordPage() {
         </header>
         <Button asChild size="lg" className="w-full">
           <Link to={ROUTES.forgotPassword}>Request a new link</Link>
+        </Button>
+      </div>
+    )
+  }
+
+  if (!session.isPasswordRecovery) {
+    return (
+      <div className="space-y-6">
+        <header className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight">Use the reset link</h1>
+          <p className="text-muted-foreground">
+            To set a new password, open the link from the password reset email.
+          </p>
+        </header>
+        <Button asChild size="lg" className="w-full">
+          <Link to={ROUTES.dashboard}>Back to dashboard</Link>
         </Button>
       </div>
     )
