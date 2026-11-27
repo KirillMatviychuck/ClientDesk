@@ -1,6 +1,8 @@
 export {
   canDelete,
   canEdit,
+  getInitials,
+  getUserDisplayName,
   isDemoSession,
   onSessionEvent,
   useCurrentWorkspace,
