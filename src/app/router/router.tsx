@@ -4,7 +4,7 @@ import { AppLayout, AuthLayout } from '@/app/layouts'
 import { ROUTES } from '@/shared/routes'
 import { GuestRoute, ProtectedRoute } from './guards'
 import { PageFallback } from './PageFallback'
-import { RouteError } from './RouteError'
+import { PageError, RouteError } from './RouteError'
 
 export const router = createBrowserRouter([
   {
@@ -50,36 +50,49 @@ export const router = createBrowserRouter([
           {
             Component: AppLayout,
             children: [
-              { index: true, element: <Navigate to={ROUTES.dashboard} replace /> },
               {
-                path: ROUTES.dashboard,
-                lazy: { Component: async () => (await import('@/pages/dashboard')).DashboardPage },
-              },
-              {
-                path: ROUTES.clients,
-                lazy: { Component: async () => (await import('@/pages/clients')).ClientsPage },
-              },
-              {
-                path: ROUTES.clientDetails,
-                lazy: {
-                  Component: async () => (await import('@/pages/client-details')).ClientDetailsPage,
-                },
-              },
-              {
-                path: ROUTES.deals,
-                lazy: { Component: async () => (await import('@/pages/deals')).DealsPage },
-              },
-              {
-                path: ROUTES.tasks,
-                lazy: { Component: async () => (await import('@/pages/tasks')).TasksPage },
-              },
-              {
-                path: ROUTES.invoices,
-                lazy: { Component: async () => (await import('@/pages/invoices')).InvoicesPage },
-              },
-              {
-                path: ROUTES.settings,
-                lazy: { Component: async () => (await import('@/pages/settings')).SettingsPage },
+                // Errors in a page render inside the shell, so navigation still works.
+                ErrorBoundary: PageError,
+                children: [
+                  { index: true, element: <Navigate to={ROUTES.dashboard} replace /> },
+                  {
+                    path: ROUTES.dashboard,
+                    lazy: {
+                      Component: async () => (await import('@/pages/dashboard')).DashboardPage,
+                    },
+                  },
+                  {
+                    path: ROUTES.clients,
+                    lazy: { Component: async () => (await import('@/pages/clients')).ClientsPage },
+                  },
+                  {
+                    path: ROUTES.clientDetails,
+                    lazy: {
+                      Component: async () =>
+                        (await import('@/pages/client-details')).ClientDetailsPage,
+                    },
+                  },
+                  {
+                    path: ROUTES.deals,
+                    lazy: { Component: async () => (await import('@/pages/deals')).DealsPage },
+                  },
+                  {
+                    path: ROUTES.tasks,
+                    lazy: { Component: async () => (await import('@/pages/tasks')).TasksPage },
+                  },
+                  {
+                    path: ROUTES.invoices,
+                    lazy: {
+                      Component: async () => (await import('@/pages/invoices')).InvoicesPage,
+                    },
+                  },
+                  {
+                    path: ROUTES.settings,
+                    lazy: {
+                      Component: async () => (await import('@/pages/settings')).SettingsPage,
+                    },
+                  },
+                ],
               },
             ],
           },
