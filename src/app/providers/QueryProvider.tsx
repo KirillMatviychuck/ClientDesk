@@ -22,7 +22,7 @@ export function QueryProvider({ children }: { children: ReactNode }) {
       {children}
       {ReactQueryDevtools && (
         <Suspense fallback={null}>
-          <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-left" />
+          <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
         </Suspense>
       )}
     </QueryClientProvider>

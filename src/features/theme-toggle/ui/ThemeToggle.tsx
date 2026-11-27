@@ -20,7 +20,7 @@ function isTheme(value: string): value is Theme {
   return OPTIONS.some((option) => option.value === value)
 }
 
-export function ThemeSwitcher() {
+export function ThemeToggle() {
   const { theme, resolvedTheme, setTheme } = useTheme()
 
   return (

@@ -1,8 +1,5 @@
+import { PageHeader } from '@/shared/ui/page-header'
+
 export function DashboardPage() {
-  return (
-    <section className="space-y-1">
-      <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
-      <p className="text-muted-foreground">Key metrics and upcoming work.</p>
-    </section>
-  )
+  return <PageHeader title="Dashboard" description="Key metrics and upcoming work." />
 }

@@ -1,8 +1,5 @@
+import { PageHeader } from '@/shared/ui/page-header'
+
 export function DealsPage() {
-  return (
-    <section className="space-y-1">
-      <h1 className="text-2xl font-semibold tracking-tight">Deals</h1>
-      <p className="text-muted-foreground">Your sales pipeline.</p>
-    </section>
-  )
+  return <PageHeader title="Deals" description="Your sales pipeline." />
 }
