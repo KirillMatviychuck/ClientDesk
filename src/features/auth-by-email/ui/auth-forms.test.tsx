@@ -10,6 +10,13 @@ import { LoginForm } from './LoginForm'
 import { RegisterForm } from './RegisterForm'
 import { ResetPasswordForm } from './ResetPasswordForm'
 
+// The session entity subscribes to Supabase on import; CI has no env for a real client.
+vi.mock('@/shared/api', () => ({
+  supabase: {
+    auth: { onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }) },
+  },
+}))
+
 vi.mock('../api', () => ({
   signInWithEmail: vi.fn(),
   signUpWithEmail: vi.fn(),
