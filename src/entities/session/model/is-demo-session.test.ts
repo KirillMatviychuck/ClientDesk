@@ -6,7 +6,13 @@ import type { SessionState } from './types'
 
 function signedIn(isAnonymous: boolean): SessionState {
   const session = { user: { id: 'u1', is_anonymous: isAnonymous } } as Session
-  return { status: 'authenticated', session, user: session.user, lastEvent: 'SIGNED_IN' }
+  return {
+    status: 'authenticated',
+    session,
+    user: session.user,
+    lastEvent: 'SIGNED_IN',
+    isPasswordRecovery: false,
+  }
 }
 
 describe('isDemoSession', () => {

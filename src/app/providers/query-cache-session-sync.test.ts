@@ -18,7 +18,13 @@ vi.mock('@/entities/session', () => ({
 
 function signedIn(userId: string, event: AuthChangeEvent): SessionState {
   const session = { user: { id: userId } } as Session
-  return { status: 'authenticated', session, user: session.user, lastEvent: event }
+  return {
+    status: 'authenticated',
+    session,
+    user: session.user,
+    lastEvent: event,
+    isPasswordRecovery: false,
+  }
 }
 
 describe('syncQueryCacheWithSession', () => {
